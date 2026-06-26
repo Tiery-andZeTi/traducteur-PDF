@@ -44,11 +44,16 @@ police de départ, on mesure la hauteur du contenu, si ça dépasse la hauteur
 utile → on réduit la police d'un cran → on re-rend, jusqu'à ce que ça tienne.
 Le débordement devient impossible : c'est la condition d'arrêt de la boucle.
 
-## Schéma JSON (décision d'architecte, à figer ensemble)
+## Schéma JSON (figé)
+
+> Le schéma est désormais **figé et verrouillé** : la référence exacte (clés
+> autorisées, règles de validité) est dans [`contrat-sortie.md`](contrat-sortie.md),
+> et c'est `validateur.py` qui le fait respecter. Le résumé ci-dessous reste utile
+> pour comprendre l'intention d'origine.
 
 Une page VO = un objet. Chaque objet contient une liste de **blocs typés**.
 Le gras/italique est porté **à l'intérieur** du texte (fragments), pas au
-niveau du bloc.
+niveau du bloc (certains modèles, comme Qwen, choisissent d'ignorer l'emphase).
 
 ```
 Page
@@ -65,8 +70,7 @@ Fragment
 ```
 
 Mapping HTML trivial : `heading`→`<h2>`, `paragraph`→`<p>`, `list`→`<ul><li>`,
-fragment bold→`<strong>`, italic→`<em>`. (Détail exact à verrouiller en début
-de session.)
+fragment bold→`<strong>`, italic→`<em>`. (Implémenté dans `json_to_html.py`.)
 
 ## Ordre de construction (IMPORTANT)
 
@@ -74,7 +78,7 @@ de session.)
 VALIDATEUR DE JSON sévère.**
 
 Raison : la partie fiable du projet, c'est le script. La variable, c'est la
-régularité d'un modèle 12B local à produire du JSON valide et bien fermé sur
+régularité d'un modèle local à produire du JSON valide et bien fermé sur
 des dizaines de pages (virgule oubliée, accolade manquante, clé hallucinée).
 Le validateur doit **refuser proprement** et localiser l'erreur (« page 7,
 bloc 3, accolade manquante ») plutôt que planter 40 pages plus loin. C'est ce
