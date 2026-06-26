@@ -4,6 +4,33 @@ Backlog des améliorations envisagées mais pas encore faites.
 
 ## À faire
 
+### Sorties dans un sous-dossier dédié (lié à l'automatisation nocturne)
+But : éviter d'éparpiller les fichiers de sortie à la racine du projet, et
+rendre l'emplacement **prévisible** pour un run headless.
+
+Constat (vérifié dans `traduire_pdf.py`) : aujourd'hui les `_page_NN.json`,
+`_workbook.json` et `_raw.txt` sont écrits dans le **dossier courant** (la racine
+quand on lance depuis le projet), tandis que le `_FINAL.pdf` se crée **à côté du
+PDF source**. Donc si le PDF est ailleurs (ex. dossier surveillé « cours de
+basse »), les sorties se retrouvent **scindées** entre deux endroits.
+
+Pistes :
+- Une modif d'une ligne : baser les chemins de sortie sur le **dossier du PDF
+  source** (`os.path.dirname(args.source_pdf)`) plutôt que sur le dossier courant
+  → toutes les sorties au même endroit que le PDF.
+- Ou un dossier de travail dédié (`_work/<nom_du_pdf>/`), ignoré par git, où tout
+  atterrit (pratique pour archiver ou jeter en bloc).
+- Côté `.gitignore` : déjà couvert (`*.pdf`, `*_page_*.json`, `*_workbook.json`,
+  `*_FINAL.pdf`, `*.raw.txt` sont ignorés à toute profondeur) → git ne clignote
+  pas, ce point est purement du rangement, pas du versionnement.
+
+⚠️ **À traiter avant de fiabiliser l'automatisation nocturne** (`lancer_traductions.ps1`
++ tâche planifiée Windows à minuit qui surveille le dossier « cours de basse ») :
+le script de lot a besoin de savoir où récupérer le `_FINAL.pdf` et où ranger /
+nettoyer les JSON intermédiaires. Voir aussi `--resume` ci-dessous (un run nocturne
+interrompu doit pouvoir reprendre). Note : l'automatisation n'a pas encore été
+testée ; à reprendre une fois la phase de test des LLM terminée.
+
 ### `--resume` pour `traduire_pdf.py` (priorité : utile sur les longs PDF)
 But : sur un PDF de 60–70 pages (~2 h de traitement), si le run s'interrompt
 (plantage, veille Windows, coupure), pouvoir **reprendre sans tout refaire**.
