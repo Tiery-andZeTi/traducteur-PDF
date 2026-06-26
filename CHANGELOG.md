@@ -54,9 +54,16 @@ Format : date (AAAA-MM-JJ) puis changements regroupés par nature
   pour qu'un futur `modeles/qwen3.6/` coexiste sans ambiguïté. `gemma` reste tel
   quel (abandonné, unique).
 
+### Passage sous Git
+- Dépôt local initialisé (branche `main`), 1er commit de l'état sain.
+- `.gitignore` : exclut `.venv`, `__pycache__`, `.claude/settings.local.json`,
+  `_archive/`, les `*.pdf` (matériel de cours, droits d'auteur) et les sorties
+  de traduction (`*_FINAL.pdf`, `*_workbook.json`, `*_page_*.json`, `*.raw.txt`).
+- Pas de remote : tout reste local pour l'instant.
+
 ### Reporté
 - Option `--profil <llm>` dans `traduire_pdf.py` (une seule commande au lieu d'une
-  par modèle) ; passage sous Git + `.gitignore`.
+  par modèle).
 
 ## 2026-06-24
 
