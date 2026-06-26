@@ -1,0 +1,23 @@
+# --- Environnement Python (jamais versionné) ---
+.venv/
+__pycache__/
+*.pyc
+
+# --- Réglages locaux de l'éditeur / Claude ---
+.claude/settings.local.json
+
+# --- Matériel de cours (droits d'auteur, lourd) : ne JAMAIS committer ---
+*.pdf
+
+# --- Sorties de traduction (régénérables, propres à chaque cours) ---
+*_FINAL.pdf
+*_workbook.json
+*_page_*.json
+*.raw.txt
+
+# --- Fichiers de test / brouillons conservés en local mais hors dépôt ---
+_archive/
+
+# --- Divers OS ---
+Thumbs.db
+desktop.ini

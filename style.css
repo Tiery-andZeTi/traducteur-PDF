@@ -1,0 +1,110 @@
+/* ============================================================
+   style.css — projet traducteur PDF (brique n°3)
+   Mise en forme de la page VF de référence.
+   Cible : WeasyPrint (HTML -> PDF), format US Letter (= taille VO).
+   Disposition : étiquette de rubrique en marge gauche, corps à droite.
+   ============================================================ */
+
+/* --- Page : format identique à la VO pour un interfoliage homogène --- */
+@page {
+  size: Letter;          /* 8,5 x 11 po, comme la page VO rasterisée */
+  margin: 20mm 18mm 18mm 18mm;
+}
+
+html {
+  font-family: "Arial", "Helvetica Neue", "Liberation Sans", sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+
+body {
+  margin: 0;
+}
+
+/* --- Une page JSON = une page PDF --- */
+.page {
+  page-break-after: always;   /* saut de page après chaque page... */
+  break-after: page;
+}
+.page:last-child {
+  page-break-after: auto;     /* ...sauf la dernière, pour éviter une page blanche finale */
+  break-after: auto;
+}
+
+/* ------------------------------------------------------------
+   Rubrique = une ligne « étiquette en marge gauche + corps à droite ».
+   Layout flex (bien supporté par WeasyPrint) : chaque étiquette reste
+   alignée en haut, face à son propre paragraphe.
+   --label-w : largeur de l'étiquette ; --gap : espace avant le corps.
+   ------------------------------------------------------------ */
+:root {
+  --label-w: 30mm;
+  --gap: 6mm;
+}
+
+.rubrique {
+  display: flex;
+  align-items: flex-start;    /* étiquette alignée sur la 1re ligne du corps */
+  margin-bottom: 0.9em;
+}
+
+.label {
+  flex: 0 0 var(--label-w);
+  margin-right: var(--gap);
+}
+
+.corps {
+  flex: 1 1 auto;
+  min-width: 0;               /* autorise la justification à bien retourner à la ligne */
+}
+
+/* --- Étiquette de rubrique --- */
+h2 {
+  margin: 0;
+  font-size: 11pt;
+  font-weight: 700;
+  color: #111;
+  hyphens: none;
+}
+
+/* --- Corps de texte --- */
+.corps p,
+.corps ul {
+  margin: 0 0 0.55em 0;
+}
+.corps > :last-child {
+  margin-bottom: 0;           /* pas d'espace superflu en bas de rubrique */
+}
+
+p {
+  text-align: justify;
+  hyphens: auto;
+}
+
+ul {
+  padding-left: 1.1em;
+  list-style: disc;
+}
+
+li {
+  margin-bottom: 0.25em;
+}
+
+strong { font-weight: 700; }
+em { font-style: italic; }
+
+/* ------------------------------------------------------------
+   Page de référence face à une partition / couverture (no_translation).
+   Volontairement quasi vide. Le repère ci-dessous aide à vérifier
+   l'assemblage pendant les tests ; il est discret et supprimable.
+   ------------------------------------------------------------ */
+.no-translation::before {
+  content: "(" attr(data-reason) ")";
+  display: block;
+  margin-top: 120mm;
+  text-align: center;
+  color: #cfcfcf;
+  font-style: italic;
+  font-size: 10pt;
+}
