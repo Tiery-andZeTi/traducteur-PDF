@@ -1,0 +1,21 @@
+# Normalisation des fins de ligne.
+# Le dépôt stocke en LF ; au checkout, chaque fichier prend la fin de ligne
+# indiquée ci-dessous. Évite les avertissements « LF will be replaced by CRLF ».
+
+# Par défaut : Git décide si c'est du texte, et stocke en LF.
+* text=auto
+
+# Fichiers texte du projet : LF partout (cohérent multi-plateforme).
+*.py   text eol=lf
+*.md   text eol=lf
+*.css  text eol=lf
+*.json text eol=lf
+*.txt  text eol=lf
+
+# Scripts PowerShell : CRLF (attendu par l'outillage Windows).
+*.ps1  text eol=crlf
+
+# Binaires : aucune conversion (sécurité si un jour ils sont suivis).
+*.pdf  binary
+*.png  binary
+*.psd  binary
