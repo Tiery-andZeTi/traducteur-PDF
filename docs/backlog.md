@@ -41,7 +41,7 @@ passée proprement. Idéal : escalade douce (0 → 0.2 → 0.4) plutôt que doub
 
 Lié : décision de fond à trancher pour l'automatisation → **temp 0.2 comme défaut Qwen**
 (robuste, qualité « pas mal ») vs **temp 0** (meilleure qualité mais fragile). Voir
-`REGLAGES-MODELES.md` et la mémoire [[un-modele-un-reglage]].
+`modeles/COMPARATIF.md` et la fiche `modeles/qwen3.5/README.md`.
 
 ## Pistes (non engagées)
 
