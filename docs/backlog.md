@@ -24,12 +24,23 @@ Pistes :
   `*_FINAL.pdf`, `*.raw.txt` sont ignorés à toute profondeur) → git ne clignote
   pas, ce point est purement du rangement, pas du versionnement.
 
-⚠️ **À traiter avant de fiabiliser l'automatisation nocturne** (`lancer_traductions.ps1`
-+ tâche planifiée Windows à minuit qui surveille le dossier « cours de basse ») :
-le script de lot a besoin de savoir où récupérer le `_FINAL.pdf` et où ranger /
-nettoyer les JSON intermédiaires. Voir aussi `--resume` ci-dessous (un run nocturne
-interrompu doit pouvoir reprendre). Note : l'automatisation n'a pas encore été
-testée ; à reprendre une fois la phase de test des LLM terminée.
+Note : pour le **lot nocturne**, `lancer_traductions.ps1` règle déjà ce point — il
+fait un `Push-Location` dans `traduit\` avant de lancer, donc FINAL + JSON
+atterrissent là, et la source réussie part dans `fait\`. Le problème « sorties
+éparpillées » ne concerne donc que les **lancements manuels** depuis la racine.
+
+### Mettre à jour `lancer_traductions.ps1` pour Qwen (avant le 1er run nocturne)
+Le bloc CONFIG est encore en **Gemma** (`$Model = "google/gemma-4-12b-qat"`) et le
+script **ne passe ni `--temperature 0` ni `--consigne`**. Tel quel, un run nocturne
+tournerait en Gemma, pas en Qwen. À faire quand l'automatisation sera reprise :
+- `$Model = "qwen/qwen3.5-9b"` ;
+- ajouter `--temperature 0` et `--consigne modeles\qwen3.5\consigne.md` à l'appel ;
+- éventuellement renommer le dossier surveillé `a_traduire\` → « cours de basse »
+  si c'est le nom voulu (variable `$DossierIn`).
+
+⚠️ L'automatisation n'a **pas encore été testée** (2026-06-26, encore en phase de
+test des LLM). À reprendre une fois Qwen validé. Voir aussi `--resume` ci-dessous
+(un run nocturne interrompu doit pouvoir reprendre).
 
 ### `--resume` pour `traduire_pdf.py` (priorité : utile sur les longs PDF)
 But : sur un PDF de 60–70 pages (~2 h de traitement), si le run s'interrompt
